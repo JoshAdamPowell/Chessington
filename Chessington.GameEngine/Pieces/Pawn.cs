@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Chessington.GameEngine.Pieces
 {
     public class Pawn : Piece
     {
-        public Pawn(Player player) 
+        public Pawn(Player player)
             : base(player) { }
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
@@ -16,18 +13,16 @@ namespace Chessington.GameEngine.Pieces
             var pawnLocation = board.FindPiece(this);
             Console.WriteLine();
             var possibleLocations = new List<Square>();
-            var newSquare = new Square();
-            if (this.Player.Equals(Player.White))
+
+
+            var movingForward = Player.Equals(Player.White) ? -1 : 1;
+
+            possibleLocations.Add(new Square(pawnLocation.Row + (1 * movingForward), pawnLocation.Col));
+
+            if (!HasMoved)
             {
-                newSquare.Row = pawnLocation.Row - 1;
-                newSquare.Col = pawnLocation.Col;
+                possibleLocations.Add(new Square(pawnLocation.Row + (2 * movingForward), pawnLocation.Col));
             }
-            if (this.Player.Equals(Player.Black))
-            {
-                newSquare.Row = pawnLocation.Row + 1;
-                newSquare.Col = pawnLocation.Col;
-            }
-            possibleLocations.Add(newSquare);
 
             return possibleLocations;
 
