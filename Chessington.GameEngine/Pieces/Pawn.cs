@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -15,21 +16,19 @@ namespace Chessington.GameEngine.Pieces
             var possibleLocations = new List<Square>();
 
             var movingForward = Player.Equals(Player.White) ? -1 : 1;
-            var potentialLocation = new Square(pawnLocation.Row + (1 * movingForward), pawnLocation.Col);
-            if (board.GetPiece(potentialLocation) == null)
-            {
-                possibleLocations.Add(potentialLocation);
-            }
+            possibleLocations.Add(new Square(pawnLocation.Row + (1 * movingForward), pawnLocation.Col));
+
 
             if (!HasMoved)
             {
-                var potentialDoubleLocation = new Square(pawnLocation.Row + (2 * movingForward), pawnLocation.Col);
-                if (board.GetPiece(potentialLocation) == null && board.GetPiece(potentialDoubleLocation) == null)
-                {
-                    possibleLocations.Add(potentialDoubleLocation);
-                }
-            }
+                possibleLocations.Add(new Square(pawnLocation.Row + (2 * movingForward), pawnLocation.Col));
 
+            }
+            if (board.IsOccupied(possibleLocations[0]))
+            {
+                possibleLocations.Clear();
+            }
+            possibleLocations = possibleLocations.Where(x => !board.IsOccupied(x)).Select(x => x).ToList();
             return possibleLocations;
 
         }
