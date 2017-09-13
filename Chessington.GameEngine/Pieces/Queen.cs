@@ -17,8 +17,6 @@ namespace Chessington.GameEngine.Pieces
                 lateralMovements.Add(new Square(queenLocation.Row, i));
                 lateralMovements.Add(new Square(i, queenLocation.Col));
             }
-            var validLateralMovements = lateralMovements.Where(x => x.Row < 8 && x.Row >= 0).Where(x => x.Col < 8 && x.Row >= 0)
-                .Select(x => x).ToList();
             var diagonalMovements = new List<Square>();
             for (var i = 1; i <= 8; i++)
             {
@@ -28,13 +26,16 @@ namespace Chessington.GameEngine.Pieces
                 diagonalMovements.Add(new Square(queenLocation.Row - i, queenLocation.Col - i));
 
             }
-            var validDiagnonalMovements = diagonalMovements.Where(x => x.Row < 8 && x.Row >= 0).Where(x => x.Col < 8 && x.Row >= 0)
+            
+
+            var possibleMovements = lateralMovements.Union(diagonalMovements).ToList();
+
+            var validMovements = possibleMovements.Where(x => x.Row < 8 && x.Row >= 0).Where(x => x.Col < 8 && x.Row >= 0)
                 .Select(x => x).ToList();
 
-            var possibleMovements = validLateralMovements.Union(validDiagnonalMovements).ToList();
-            possibleMovements.Remove(queenLocation);
+            validMovements.Remove(queenLocation);
 
-            return possibleMovements;
+            return validMovements;
         }
     }
 }
