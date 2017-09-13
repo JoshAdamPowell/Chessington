@@ -14,14 +14,20 @@ namespace Chessington.GameEngine.Pieces
             Console.WriteLine();
             var possibleLocations = new List<Square>();
 
-
             var movingForward = Player.Equals(Player.White) ? -1 : 1;
-
-            possibleLocations.Add(new Square(pawnLocation.Row + (1 * movingForward), pawnLocation.Col));
+            var potentialLocation = new Square(pawnLocation.Row + (1 * movingForward), pawnLocation.Col);
+            if (board.GetPiece(potentialLocation) == null)
+            {
+                possibleLocations.Add(potentialLocation);
+            }
 
             if (!HasMoved)
             {
-                possibleLocations.Add(new Square(pawnLocation.Row + (2 * movingForward), pawnLocation.Col));
+                var potentialDoubleLocation = new Square(pawnLocation.Row + (2 * movingForward), pawnLocation.Col);
+                if (board.GetPiece(potentialLocation) == null && board.GetPiece(potentialDoubleLocation) == null)
+                {
+                    possibleLocations.Add(potentialDoubleLocation);
+                }
             }
 
             return possibleLocations;
